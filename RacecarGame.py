@@ -2,17 +2,20 @@ import pygame
 from Car import Car
 import time
 import Const
+from Track import Track
 
 pygame.init()
 
-TRACKS = ["images/track1.png"]
+TRACKS = [Const.TRACK1]
 
 screen = pygame.display.set_mode([Const.SCREEN_WIDTH, Const.SCREEN_HEIGHT])
  
 running = True
-car = Car(Const.CAR_MAX_SPEED, Const.CAR_ROTATE_SPEED, screen)
 track = pygame.image.load(TRACKS[0])
 clock = pygame.time.Clock()
+
+track1 = Track(Const.TRACK1)
+car = Car(Const.CAR_MAX_SPEED, Const.CAR_ROTATE_SPEED, Const.CAR_ACCEL, screen, track1)
 
 while running:
     clock.tick(Const.FPS) 

@@ -3,22 +3,20 @@ import math
 import Const
 
 class Car(pygame.sprite.Sprite):
-    def __init__(self, max_speed, rotate_speed, screen):
+    def __init__(self, max_speed, rotate_speed, accel, screen, track):
         super(Car, self).__init__()
         self.img = pygame.image.load(Const.CAR_IMG)
         self.surf = self.img.convert()
         self.rect = self.surf.get_rect()
-
-        #self.x = RacecarGame.CAR_START_X #starting x coord
-        #self.y = RacecarGame.CAR_START_Y #starting y coord
+        self.accel = accel
         self.direction = 0 #starting angle in radians (pointing right)
         self.max_speed = max_speed
         self.speed = 0 
-        self.dt = 0.1
         self.x = Const.CAR_START_X
         self.y = Const.CAR_START_Y
         self.screen = screen
         self.rotate_speed = rotate_speed
+        self.track = track
         self.controls = {'accelerate': 0, 'decelerate': 0, 'turn_left': 0, 'turn_right': 0}
 
     def update_controls(self, pressed_keys):
@@ -41,15 +39,15 @@ class Car(pygame.sprite.Sprite):
 
     def move(self):
         if self.controls['accelerate'] == 1:
-            self.speed = min(self.speed + 1, self.max_speed)
+            self.speed = min(self.speed + self.accel, self.max_speed)
         if self.controls['decelerate']:
-            self.speed = min(self.speed - 1, self.max_speed)
+            self.speed = min(self.speed - self.accel, self.max_speed)
         if self.controls['turn_left']:
             self.direction += self.rotate_speed
         if self.controls['turn_right']:
             self.direction -= self.rotate_speed
-        dx = self.speed * self.dt * math.cos(self.direction)
-        dy = self.speed * self.dt * -math.sin(self.direction)
+        dx = self.speed * math.cos(self.direction)
+        dy = self.speed * -math.sin(self.direction)
         self.x += dx
         self.y += dy
         self.rect.move_ip(dx, dy)
@@ -63,7 +61,9 @@ class Car(pygame.sprite.Sprite):
             self.y = 0
         if self.y >= Const.SCREEN_HEIGHT:
             self.y = Const.SCREEN_HEIGHT
-        print(self.x)
+        if self.track.pixels[self.rect.centerx][self.rect.centery] == 0:
+            print('out of bounds', self.count)
+            #kill the car
     
     def rotate(self):
         rotated_image = pygame.transform.rotate(self.img, self.direction * 180 / math.pi)
