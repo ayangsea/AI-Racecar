@@ -1,0 +1,15 @@
+import math
+
+SCREEN_WIDTH = 1500
+SCREEN_HEIGHT = 826
+FPS = 60
+
+CAR_IMG = "images/car.png"
+
+CAR_START_X = 200
+CAR_START_Y = 400
+CAR_MAX_SPEED = 100
+CAR_ROTATE_SPEED = math.pi / 48
+
+
+
