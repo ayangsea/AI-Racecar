@@ -1,10 +1,11 @@
+from Ray import Ray
 import pygame
 import math
 import Const
 from Brain import Brain
 
 class Car(pygame.sprite.Sprite):
-    def __init__(self, max_speed, rotate_speed, accel, screen, track, brain=None):
+    def __init__(self, max_speed, rotate_speed, accel, screen, track, showRays, brain=None):
         super(Car, self).__init__()
         self.img = pygame.image.load(Const.CAR_IMG)
         self.surf = self.img.convert()
@@ -18,11 +19,13 @@ class Car(pygame.sprite.Sprite):
         self.screen = screen
         self.rotate_speed = rotate_speed
         self.track = track
+        self.showRays = showRays
         self.controls = {'accelerate': 0, 'decelerate': 0, 'turn_left': 0, 'turn_right': 0}
         if brain:
             self.brain = brain
         else:
             self.brain = Brain(Const.BRAIN_INPUT_NODES, Const.BRAIN_HIDDEN_NODES, Const.BRAIN_OUTPUT_NODES)
+        self.rays = [Ray(angle, True, self.track.pixels, self) for angle in Const.RAY_ANGLES]
 
     def update_controls(self, pressed_keys):
         if pressed_keys[pygame.K_UP]:
@@ -67,17 +70,26 @@ class Car(pygame.sprite.Sprite):
         if self.y >= Const.SCREEN_HEIGHT:
             self.y = Const.SCREEN_HEIGHT
         if self.track.pixels[self.rect.centerx][self.rect.centery] == 0:
-            print('out of bounds', self.count)
+            print('out of bounds')
             #kill the car
     
     def rotate(self):
         rotated_image = pygame.transform.rotate(self.img, self.direction * 180 / math.pi)
         self.rect = rotated_image.get_rect(center=self.img.get_rect(topleft=(self.x, self.y)).center)
         self.screen.blit(rotated_image, self.rect.topleft)
+        for ray in self.rays:
+            print('a')
+
+    def displayRays(self):
+        for ray in self.rays:
+            pygame.draw.line(self.screen, (60, 179, 113), list(ray.closest_boundary_point()), [self.rect.centerx, self.rect.centery], 5)
 
     def update(self, pressed_keys, screen):
         self.update_controls(pressed_keys)
         self.move()
         self.rotate()
         self.check_bounds()
+        if self.showRays:
+            self.displayRays()
+
         

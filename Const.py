@@ -17,6 +17,8 @@ BRAIN_INPUT_NODES = 5
 BRAIN_HIDDEN_NODES = 6
 BRAIN_OUTPUT_NODES = 4
 
+RAY_ANGLES = [-math.pi / 2, -math.pi / 4, 0, math.pi / 4, math.pi / 2]
+
 
 
 

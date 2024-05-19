@@ -1,6 +1,5 @@
 import pygame
 from Car import Car
-import time
 import Const
 from Track import Track
 from Brain import Brain
@@ -16,7 +15,8 @@ track = pygame.image.load(TRACKS[0])
 clock = pygame.time.Clock()
 
 track1 = Track(Const.TRACK1)
-car = Car(Const.CAR_MAX_SPEED, Const.CAR_ROTATE_SPEED, Const.CAR_ACCEL, screen, track1)
+car = Car(Const.CAR_MAX_SPEED, Const.CAR_ROTATE_SPEED, Const.CAR_ACCEL, screen, track1, True)
+
 
 while running:
     clock.tick(Const.FPS) 
@@ -31,6 +31,5 @@ while running:
     car.update(pressed_keys, screen)
 
     pygame.display.flip()
-    time.sleep(0.005)
 
 pygame.quit()
