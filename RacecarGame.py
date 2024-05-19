@@ -3,6 +3,7 @@ from Car import Car
 import time
 import Const
 from Track import Track
+from Brain import Brain
 
 pygame.init()
 

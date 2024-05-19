@@ -1,9 +1,10 @@
 import pygame
 import math
 import Const
+from Brain import Brain
 
 class Car(pygame.sprite.Sprite):
-    def __init__(self, max_speed, rotate_speed, accel, screen, track):
+    def __init__(self, max_speed, rotate_speed, accel, screen, track, brain=None):
         super(Car, self).__init__()
         self.img = pygame.image.load(Const.CAR_IMG)
         self.surf = self.img.convert()
@@ -18,6 +19,10 @@ class Car(pygame.sprite.Sprite):
         self.rotate_speed = rotate_speed
         self.track = track
         self.controls = {'accelerate': 0, 'decelerate': 0, 'turn_left': 0, 'turn_right': 0}
+        if brain:
+            self.brain = brain
+        else:
+            self.brain = Brain(Const.BRAIN_INPUT_NODES, Const.BRAIN_HIDDEN_NODES, Const.BRAIN_OUTPUT_NODES)
 
     def update_controls(self, pressed_keys):
         if pressed_keys[pygame.K_UP]:
