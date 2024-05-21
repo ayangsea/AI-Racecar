@@ -1,4 +1,5 @@
 import math
+import Const
 
 class Ray():
     def __init__(self, angle_relative_to_car, show, pixels, car):
@@ -12,7 +13,7 @@ class Ray():
         x = self.car.rect.centerx
         y = self.car.rect.centery
         track = self.car.track
-        while track.pixels[round(x)][round(y)] == 1: #while it is not out of bounds
+        while not track.pixels[round(x)][round(y)] == Const.OUT_OF_BOUNDS: #while it is not out of bounds
             x += self.increment_distance * math.cos(self.angle_relative_to_car - self.car.direction)
             y += self.increment_distance * math.sin(self.angle_relative_to_car - self.car.direction)
         return (x, y)

@@ -22,6 +22,7 @@ class Car(pygame.sprite.Sprite):
         self.track = track
         self.showRays = showRays
         self.controls = {'accelerate': 0, 'decelerate': 0, 'turn_left': 0, 'turn_right': 0}
+        self.checkpoints_reached = []
         if brain:
             self.brain = brain
         else:
@@ -77,9 +78,15 @@ class Car(pygame.sprite.Sprite):
             self.y = 0
         if self.y >= Const.SCREEN_HEIGHT:
             self.y = Const.SCREEN_HEIGHT
-        if self.track.pixels[self.rect.centerx][self.rect.centery] == 0:
-            print('out of bounds')
+        if self.track.pixels[self.rect.centerx][self.rect.centery] == Const.OUT_OF_BOUNDS:
             self.speed = 0
+        
+    
+    def update_checkpoints(self):
+        pixel_value = self.track.pixels[self.rect.centerx][self.rect.centery]
+        if pixel_value >= 1 and not pixel_value in self.checkpoints_reached:
+            print("new checkpoints")
+            self.checkpoints_reached.append(pixel_value)
     
     def rotate(self):
         rotated_image = pygame.transform.rotate(self.img, self.direction * 180 / math.pi)
@@ -94,7 +101,7 @@ class Car(pygame.sprite.Sprite):
         carPoint = (self.x, self.y)
         inputs = [self.distance(carPoint, ray.closest_boundary_point()) / Const.SCREEN_HEIGHT for ray in self.rays]
         outputs = self.brain.forward(inputs)
-        print(outputs)
+        #print(outputs)
         maxIndex = 0
         maxValue = -Infinity
         for i in range(4):
@@ -121,6 +128,7 @@ class Car(pygame.sprite.Sprite):
         self.move()
         self.rotate()
         self.check_bounds()
+        self.update_checkpoints()
         if self.showRays:
             self.displayRays()
 
