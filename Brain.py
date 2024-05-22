@@ -1,5 +1,6 @@
 import numpy
 
+
 class Brain():
     def __init__(self, input_nodes, hidden_nodes, output_nodes):
         self.input_nodes = input_nodes
@@ -28,3 +29,25 @@ class Brain():
 
     def sigmoid(self, x):
         return 1 / (1 + numpy.exp(-x))
+    
+    def copy(self):
+        copiedBrain = Brain(self.input_nodes, self.hidden_nodes, self.output_nodes)
+        copiedBrain.weights_input_hidden = numpy.copy(self.weights_input_hidden)
+        copiedBrain.weights_hidden_output = numpy.copy(self.weights_hidden_output)
+        copiedBrain.bias_input_hidden = numpy.copy(self.bias_input_hidden)
+        copiedBrain.bias_hidden_output = numpy.copy(self.bias_hidden_output)
+        return copiedBrain
+
+    def mutate(self, rate):
+        rng = numpy.random.default_rng()
+        def mutateFunction(x):
+            if rng.random() < rate:
+                return x + numpy.random.normal(0, 0.1)
+            else:
+                return x
+        vectorized_mutate_function = numpy.vectorize(mutateFunction)
+
+        self.weights_input_hidden = vectorized_mutate_function(self.weights_input_hidden)
+        self.weights_hidden_output = vectorized_mutate_function(self.weights_hidden_output)
+        self.bias_input_hidden = vectorized_mutate_function(self.bias_input_hidden)
+        self.bias_hidden_output = vectorized_mutate_function(self.bias_hidden_output)

@@ -5,7 +5,6 @@ class Checkpoint():
         self.p1 = p1
         self.p2 = p2
         self.screen = screen
-        #self.id = id
         self.points = []
 
     def drawCheckpoint(self, color):
