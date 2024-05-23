@@ -3,7 +3,7 @@ import math
 SCREEN_WIDTH = 1500
 SCREEN_HEIGHT = 826
 FPS = 60
-NUM_CARS_PER_GENERATION = 50
+NUM_CARS_PER_GENERATION = 1
 NUM_TRACKS = 3
 
 CAR_IMG = "images/car.png"
@@ -11,19 +11,22 @@ TRACK1_IMG = "images/track1.png"
 TRACK2_IMG = "images/track2.png"
 TRACK3_IMG = "images/track3.png"
 
-TRACK1_START_X = 50
-TRACK1_START_Y = 400
+TRACK1_START_X = 300
+TRACK1_START_Y = 60
 TRACK2_START_X = 200
-TRACK2_START_Y = 100
-TRACK3_START_X = 800
-TRACK3_START_Y = 425
+TRACK2_START_Y = 680
+TRACK3_START_X = 200
+TRACK3_START_Y = 100
 
-CAR_MAX_SPEED = 10
+CAR_MAX_SPEED = 7
 CAR_ROTATE_SPEED = math.pi / 48
 CAR_ACCEL = 0.1
 
 OUT_OF_BOUNDS = -1
 TRACK = 0
+
+CHECKPOINT_TIMEOUT = 5
+GENERATION_TIMEOUT = 15
 
 BRAIN_INPUT_NODES = 5
 BRAIN_HIDDEN_NODES = 17
@@ -32,8 +35,8 @@ BRAIN_OUTPUT_NODES = 4
 RAY_ANGLES = [-math.pi / 2, -math.pi / 4, 0, math.pi / 4, math.pi / 2]
 
 CHECKPOINT1_POINTS = [
-    ((190, 150), (350, 200)),
     ((400, 30), (420, 130)),
+    ((100, 330), (250, 400)),
     ((600, 5), (610, 100)),
     ((900, 5), (890, 100)),
     ((1030, 130), (1150, 60)),
@@ -49,10 +52,12 @@ CHECKPOINT1_POINTS = [
     ((350, 650), (350, 785)),
     ((100, 700), (250, 600)),
     ((25, 550), (220, 550)),
-    ((100, 330), (250, 400))
+    ((190, 150), (350, 200))
 ]
+NUM_CHECKPOINT1_POINTS = 18
 
 CHECKPOINT2_POINTS = [
+    ((310, 650), (310, 780)),
     ((400, 70), (400, 210)),
     ((600, 50), (550, 210)),
     ((800, 130), (730, 270)),
@@ -71,13 +76,14 @@ CHECKPOINT2_POINTS = [
     ((600, 350), (650, 500)),
     ((500, 440), (600, 540)),
     ((410, 570), (540, 680)),
-    ((310, 650), (310, 780)),
-    ((120, 640), (310, 640)),
     ((330, 440), (410, 540)),
     ((340, 380), (470, 290)),
     ((230, 330), (380, 230)),
-    ((90, 100), (300, 200))
+    ((90, 100), (300, 200)),
+    ((120, 640), (310, 640))
 ]
+NUM_CHECKPOINT2_POINTS = 24
+
 
 CHECKPOINT3_POINTS = [
     

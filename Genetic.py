@@ -26,6 +26,9 @@ def fitness(savedCars):
     total = 0
     total = sum(car.score for car in savedCars)
     
+    if total == 0:
+        return 0
+
     for car in savedCars:
         car.fitness = car.score / total
         

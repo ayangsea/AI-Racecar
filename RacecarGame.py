@@ -21,9 +21,9 @@ track3Img = pygame.image.load(Const.TRACK3_IMG)
 trackImgs = [track1Img, track2Img, track3Img]
 
 #Track objects
-track1 = Track(Const.TRACK1_IMG, screen, Const.TRACK1_START_X, Const.TRACK1_START_Y)
-track2 = Track(Const.TRACK2_IMG, screen, Const.TRACK2_START_X, Const.TRACK2_START_Y)
-track3 = Track(Const.TRACK3_IMG, screen, Const.TRACK3_START_X, Const.TRACK3_START_Y)
+track1 = Track(Const.TRACK1_IMG, screen, Const.TRACK1_START_X, Const.TRACK1_START_Y, Const.NUM_CHECKPOINT1_POINTS)
+track2 = Track(Const.TRACK2_IMG, screen, Const.TRACK2_START_X, Const.TRACK2_START_Y, Const.NUM_CHECKPOINT2_POINTS)
+track3 = Track(Const.TRACK3_IMG, screen, Const.TRACK3_START_X, Const.TRACK3_START_Y, 2)
 tracks = [track1, track2, track3]
 
 #Init Checkpoints

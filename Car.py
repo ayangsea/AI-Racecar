@@ -76,19 +76,28 @@ class Car(pygame.sprite.Sprite):
         self.y += dy
         self.rect.move_ip(dx, dy)
 
-    def check_bounds(self, generation, savedCars):
-        if self.x < 0:
-            self.x = 0
-        if self.x > Const.SCREEN_WIDTH:
-            self.x = Const.SCREEN_WIDTH
-        if self.y <= 0:
-            self.y = 0
-        if self.y >= Const.SCREEN_HEIGHT:
-            self.y = Const.SCREEN_HEIGHT
+    def check_kill_conditions(self, generation, savedCars):
+
+        #track bounds
         if self.track.pixels[self.rect.centerx][self.rect.centery] == Const.OUT_OF_BOUNDS:
             self.speed = 0
             self.kill(generation, savedCars)
+            return
+
+        #going backwards
+        if len(self.checkpoints_reached) == 0 and self.track.pixels[self.rect.centerx][self.rect.centery] == self.track.num_checkpoints:
+            self.kill(generation, savedCars)
+            return
         
+        #time between checkpoints
+        if self.time_since_last_checkpoint > Const.CHECKPOINT_TIMEOUT:
+            self.kill(generation, savedCars)
+            return
+
+        #max generation time
+        if time.time() - self.start_time > Const.GENERATION_TIMEOUT:
+            self.kill(generation, savedCars)
+            return
     
     def update_checkpoints(self):
         pixel_value = self.track.pixels[self.rect.centerx][self.rect.centery]
@@ -140,8 +149,8 @@ class Car(pygame.sprite.Sprite):
     def set_score(self):
         time_alive = time.time() - self.start_time
         self.score = 15 * self.num_checkpoints_reached + time_alive
-        # if self.num_checkpoints_reached == 0:
-        #     self.score = 0
+        if self.x == self.track.startX and self.y == self.track.startY:
+            self.score = 0
         # self.score = self.num_checkpoints_reached
 
     def kill(self, generation, savedCars):
@@ -151,16 +160,14 @@ class Car(pygame.sprite.Sprite):
 
     def update(self, pressed_keys, generation, savedCars):
         self.update_controls(pressed_keys)
-        self.think()
+        #self.think()
         self.move()
         self.rotate()
-        self.check_bounds(generation, savedCars)
+        self.check_kill_conditions(generation, savedCars)
         self.update_checkpoints()
         if self.showRays:
             self.displayRays()
        
-        if (self.time_since_last_checkpoint > 5):
-            self.kill(generation, savedCars)
         
 
 

@@ -6,7 +6,7 @@ import pygame
 
 class Track():
 
-    def __init__(self, track, screen, startX, startY):
+    def __init__(self, track, screen, startX, startY, num_checkpoints):
         self.trackImg = track
         self.track = Image.open(track).load()
         self.np_img = numpy.array(self.track)
@@ -15,6 +15,7 @@ class Track():
         self.color_checkpoint_map = {}
         self.startX = startX
         self.startY = startY
+        self.num_checkpoints = num_checkpoints
 
     def init_checkpoints(self, checkpoints):
         checkpointID = 1
