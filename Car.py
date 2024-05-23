@@ -13,7 +13,7 @@ class Car(pygame.sprite.Sprite):
         self.surf = self.img.convert()
         self.rect = self.surf.get_rect()
         self.track = track
-        self.direction = self.track.startAngle #starting angle in radians (pointing right)
+        self.direction = self.track.startAngle
         self.speed = 0 
         self.x = self.track.startX
         self.y = self.track.startY
@@ -102,7 +102,6 @@ class Car(pygame.sprite.Sprite):
     def update_checkpoints(self):
         pixel_value = self.track.pixels[self.rect.centerx][self.rect.centery]
         if pixel_value >= 1 and not pixel_value in self.checkpoints_reached:
-            #print("new checkpoints")
             self.checkpoints_reached.append(pixel_value)
             self.time_since_last_checkpoint = 0
             self.last_checkpoint_time = time.time()
@@ -126,7 +125,6 @@ class Car(pygame.sprite.Sprite):
         carPoint = (self.x, self.y)
         inputs = [self.distance(carPoint, ray.closest_boundary_point()) / Const.SCREEN_HEIGHT for ray in self.rays]
         outputs = self.brain.forward(inputs)
-        #print(outputs)
         maxIndex = 0
         maxValue = -Infinity
         for i in range(4):

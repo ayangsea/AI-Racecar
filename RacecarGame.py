@@ -22,7 +22,6 @@ running = True
 track1Img = pygame.image.load(Const.TRACK1_IMG)
 track2Img = pygame.image.load(Const.TRACK2_IMG)
 track3Img = pygame.image.load(Const.TRACK3_IMG)
-
 trackImgs = [track1Img, track2Img, track3Img]
 
 #Track objects
@@ -46,9 +45,6 @@ track2.track_pixel_array()
 screen.blit(track3Img, (0, 0))
 track3.init_checkpoints(checkpoints3)
 track3.track_pixel_array()
-
-# DF = pandas.DataFrame(track2.pixels)
-# DF.to_csv("data1.csv")
 
 #Init generations
 generation = [Car(screen, track1, SHOW_RAYS) for i in range(Const.NUM_CARS_PER_GENERATION)]
@@ -79,18 +75,5 @@ while running:
         car.update(pressed_keys, generation, savedCars)
     
     pygame.display.flip()
-
-
-# screen.blit(trackImgs[1], (0, 0))
-# for checkpoint in checkpoints[1]:
-#     pygame.display.flip()
-#     time.sleep(0.1)
-#     checkpoint.drawCheckpoint((0, 0, 255))
-
-# pygame.display.flip()
-
-
-while True:
-    x = 1
 
 pygame.quit()
