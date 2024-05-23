@@ -3,11 +3,9 @@ from Car import Car
 import random
 
 def next_generation(generation, savedCars, screen, track):
-    print("next generatio")
     fitness(savedCars)
     for i in range(Const.NUM_CARS_PER_GENERATION):
         generation.append(pick_one(savedCars, screen, track))
-    print(len(generation))
     return generation
 
 def pick_one(savedCars, screen, track):
@@ -21,7 +19,7 @@ def pick_one(savedCars, screen, track):
     
     car = savedCars[index]
     child = Car(Const.CAR_MAX_SPEED, Const.CAR_ROTATE_SPEED, Const.CAR_ACCEL, screen, track, False, car.brain)
-    child.brain.mutate(0.1)
+    child.brain.mutate(0.2)
     return child
 
 def fitness(savedCars):

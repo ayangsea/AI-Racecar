@@ -16,11 +16,11 @@ class Car(pygame.sprite.Sprite):
         self.direction = 0 #starting angle in radians (pointing right)
         self.max_speed = max_speed
         self.speed = 0 
-        self.x = Const.CAR_START_X
-        self.y = Const.CAR_START_Y
+        self.track = track
+        self.x = self.track.startX
+        self.y = self.track.startY
         self.screen = screen
         self.rotate_speed = rotate_speed
-        self.track = track
         self.score = 0
         self.fitness = 0
         self.showRays = showRays
@@ -140,6 +140,9 @@ class Car(pygame.sprite.Sprite):
     def set_score(self):
         time_alive = time.time() - self.start_time
         self.score = 15 * self.num_checkpoints_reached + time_alive
+        # if self.num_checkpoints_reached == 0:
+        #     self.score = 0
+        # self.score = self.num_checkpoints_reached
 
     def kill(self, generation, savedCars):
         generation.remove(self)
@@ -156,7 +159,9 @@ class Car(pygame.sprite.Sprite):
         if self.showRays:
             self.displayRays()
        
-        if (self.time_since_last_checkpoint > 10):
+        if (self.time_since_last_checkpoint > 5):
             self.kill(generation, savedCars)
+        
+
 
         

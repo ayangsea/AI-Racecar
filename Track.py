@@ -6,12 +6,15 @@ import pygame
 
 class Track():
 
-    def __init__(self, track, screen):
+    def __init__(self, track, screen, startX, startY):
+        self.trackImg = track
         self.track = Image.open(track).load()
         self.np_img = numpy.array(self.track)
         self.pixels = numpy.zeros((Const.SCREEN_WIDTH, Const.SCREEN_HEIGHT))
         self.screen = screen
         self.color_checkpoint_map = {}
+        self.startX = startX
+        self.startY = startY
 
     def init_checkpoints(self, checkpoints):
         checkpointID = 1
@@ -31,8 +34,6 @@ class Track():
                     self.pixels[x][y] = Const.OUT_OF_BOUNDS
                 elif pixel_array[x, y] in self.color_checkpoint_map.keys():
                     self.pixels[x][y] = self.color_checkpoint_map[pixel_array[x, y]]
-        # DF = pandas.DataFrame(self.pixels)
-        # DF.to_csv("data1.csv")
 
 
 
