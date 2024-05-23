@@ -7,20 +7,17 @@ from Brain import Brain
 import time
 
 class Car(pygame.sprite.Sprite):
-    def __init__(self, max_speed, rotate_speed, accel, screen, track, showRays, brain=None):
+    def __init__(self, screen, track, showRays, brain=None):
         super(Car, self).__init__()
         self.img = pygame.image.load(Const.CAR_IMG)
         self.surf = self.img.convert()
         self.rect = self.surf.get_rect()
-        self.accel = accel
-        self.direction = 0 #starting angle in radians (pointing right)
-        self.max_speed = max_speed
-        self.speed = 0 
         self.track = track
+        self.direction = self.track.startAngle #starting angle in radians (pointing right)
+        self.speed = 0 
         self.x = self.track.startX
         self.y = self.track.startY
         self.screen = screen
-        self.rotate_speed = rotate_speed
         self.score = 0
         self.fitness = 0
         self.showRays = showRays
@@ -63,13 +60,13 @@ class Car(pygame.sprite.Sprite):
 
     def move(self):
         if self.controls['accelerate'] == 1:
-            self.speed = max(min(self.speed + self.accel, self.max_speed), 0)
+            self.speed = max(min(self.speed + Const.CAR_ACCEL, Const.CAR_MAX_SPEED), 0)
         if self.controls['decelerate']:
-            self.speed = max(min(self.speed - self.accel, self.max_speed), 0)
+            self.speed = max(min(self.speed - Const.CAR_ACCEL, Const.CAR_MAX_SPEED), 0)
         if self.controls['turn_left']:
-            self.direction += self.rotate_speed
+            self.direction += Const.CAR_ROTATE_SPEED
         if self.controls['turn_right']:
-            self.direction -= self.rotate_speed
+            self.direction -= Const.CAR_ROTATE_SPEED
         dx = self.speed * math.cos(self.direction)
         dy = self.speed * -math.sin(self.direction)
         self.x += dx
@@ -85,7 +82,10 @@ class Car(pygame.sprite.Sprite):
             return
 
         #going backwards
-        if len(self.checkpoints_reached) == 0 and self.track.pixels[self.rect.centerx][self.rect.centery] == self.track.num_checkpoints:
+        if (len(self.checkpoints_reached) == 0 and self.track.pixels[self.rect.centerx][self.rect.centery] == self.track.num_checkpoints + 1):
+            self.kill(generation, savedCars)
+            return
+        elif len(self.checkpoints_reached) > 0 and self.track.pixels[self.rect.centerx][self.rect.centery] == self.checkpoints_reached[len(self.checkpoints_reached) - 1] - 1:
             self.kill(generation, savedCars)
             return
         
@@ -148,10 +148,9 @@ class Car(pygame.sprite.Sprite):
 
     def set_score(self):
         time_alive = time.time() - self.start_time
-        self.score = 15 * self.num_checkpoints_reached + time_alive
+        self.score = self.num_checkpoints_reached * self.num_checkpoints_reached
         if self.x == self.track.startX and self.y == self.track.startY:
             self.score = 0
-        # self.score = self.num_checkpoints_reached
 
     def kill(self, generation, savedCars):
         generation.remove(self)
@@ -160,7 +159,7 @@ class Car(pygame.sprite.Sprite):
 
     def update(self, pressed_keys, generation, savedCars):
         self.update_controls(pressed_keys)
-        #self.think()
+        self.think()
         self.move()
         self.rotate()
         self.check_kill_conditions(generation, savedCars)

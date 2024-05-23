@@ -18,7 +18,7 @@ def pick_one(savedCars, screen, track):
     index -= 1
     
     car = savedCars[index]
-    child = Car(Const.CAR_MAX_SPEED, Const.CAR_ROTATE_SPEED, Const.CAR_ACCEL, screen, track, False, car.brain)
+    child = Car(screen, track, False, car.brain)
     child.brain.mutate(0.2)
     return child
 
