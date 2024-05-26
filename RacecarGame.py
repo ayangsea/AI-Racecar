@@ -11,6 +11,7 @@ from Checkpoint import Checkpoint
 #Global Variabls
 SHOW_RAYS = False
 SHOW_CHECKPOINTS = True
+RUN_BEST_CAR = False
 
 #Init Pygame
 pygame.init()
@@ -35,7 +36,6 @@ checkpoints1 = [Checkpoint(point[0], point[1], screen) for point in Const.CHECKP
 checkpoints2 = [Checkpoint(point[0], point[1], screen) for point in Const.CHECKPOINT2_POINTS]
 checkpoints3 = [Checkpoint(point[0], point[1], screen) for point in Const.CHECKPOINT3_POINTS]
 checkpoints = [checkpoints1, checkpoints2, checkpoints3]
-
 screen.blit(track1Img, (0, 0))
 track1.init_checkpoints(checkpoints1)
 track1.track_pixel_array()
@@ -50,6 +50,7 @@ track3.track_pixel_array()
 generation = [Car(screen, track1, SHOW_RAYS) for i in range(Const.NUM_CARS_PER_GENERATION)]
 generation_num = 0
 savedCars = []
+bestCar = generation[0]
     
 pygame.display.flip()
 while running:
@@ -63,6 +64,9 @@ while running:
     screen.blit(trackImgs[generation_num % Const.NUM_TRACKS], (0, 0))
     pressed_keys = pygame.key.get_pressed()
     if len(generation) == 0:
+        for car in savedCars:
+            if car.score > bestCar.score:
+                bestCar = car
         generation_num += 1
         generation = Genetic.next_generation(generation, savedCars, screen, tracks[generation_num % Const.NUM_TRACKS])
         savedCars = []
@@ -75,5 +79,14 @@ while running:
         car.update(pressed_keys, generation, savedCars)
     
     pygame.display.flip()
+
+df = pandas.DataFrame(bestCar.brain.weights_input_hidden)
+df.to_csv("best_car_brain/input_hidden_w.csv")
+df = pandas.DataFrame(bestCar.brain.weights_hidden_output)
+df.to_csv("best_car_brain/hidden_output_w.csv")
+df = pandas.DataFrame(bestCar.brain.bias_input_hidden)
+df.to_csv("best_car_brain/input_hidden_b.csv")
+df = pandas.DataFrame(bestCar.brain.bias_hidden_output)
+df.to_csv("best_car_brain/hidden_output_b.csv")
 
 pygame.quit()
